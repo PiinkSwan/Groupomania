@@ -1,8 +1,9 @@
-const passwordValidator = require('password-validator');
+// Mise en place de critères pour la création d'un mot de passe
+const passwordValidator = require('password-validator'); //On utilise le package password-validator pour cela
 
-//Créatioon d'un shéma de donnée pour les mots de passe
-const passwordShema = new passwordValidator();
+const passwordShema = new passwordValidator(); //En créant le shéma demandé par la doc
 passwordShema
+//CRITÉRES DEMANDÉ
 //Doit contenir minimum 8 lettres/caractères
 .ls().min(8)
 //Ne doit dépasser les 100 caractères
@@ -16,7 +17,7 @@ passwordShema
 //Ne doit pas contenir une espace
 .has().not().spaces() 
 //Mettre des valeurs sur une liste noire
-.is().not().oneOf(['Passw0rd', 'Password123']);
+.is().not().oneOf(['Passw0rd', 'Password123', "Pwd123", "AZERTY", "QWERTY"]); //ne doit pas être ces mots de passe
 
 
 //Le module fournit une validation de base des mots de passe
@@ -33,3 +34,5 @@ module.exports = (req, res, next) => {
       next();
     }
   };
+
+  module.exports = passwordShema;

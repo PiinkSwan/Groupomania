@@ -1,4 +1,4 @@
-const passwordSchema = require("../models/PwdControl");
+const passwordSchema = require("../models/PwdControl"); //On récupère notre shéma
 
 // Ce module fournit une validation de base des mots de passe
 module.exports = (req, res, next) => {

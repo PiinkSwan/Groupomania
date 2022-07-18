@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { db } = require("../models/user");
 const User = require("../models/user");
 require("dotenv").config();
 const TOKEN = process.env.TOKEN;
@@ -80,3 +81,94 @@ exports.login = (req, res, next) => {
         })
     .catch((error) => res.status(500).json({ error }));
 };
+
+//Récuparation de tous les users
+exports.getAllUsers = (req, res, next) => {
+    db.user.findAll ({
+        attributes: [
+            //Tableau correspond aux informations damandées à la BDD
+            "id",
+            "firstName",
+            "lastName",
+            "username",
+            "email",
+            "description",
+            "picture",
+        ],
+    })
+    .then((users) => res.status(200).json(users))
+
+    .catch((error) => res.status(500).json({ error }));
+};
+
+//Mise à jour d'un user
+
+exports.updateUser = async (req, res, next) => {
+    let newPicture;
+    let user = await db.User.findOne({ where: { id: req.params.id } });
+    // Await important ! findOne doit s'éxécuter AVANT !
+  
+    // Si nouvelle image transmise celle-ci est enregistrée
+    if (req.file) {
+      newPicture = `${req.protocol}://${req.get("host")}/images/${
+        req.file.filename
+      }`;
+    }
+  
+    // Si nouvelle image, et image précédente existante, cette dernière est supprimée
+    if (newPicture && user.picture) {
+      const filename = user.picture.split("/images/")[1];
+      fs.unlink(`images/${filename}`, (error) => {
+        if (error) console.log(error);
+        else {
+          console.log(`Deleted file: images/${filename}`);
+        }
+      });
+    }
+  
+    db.User.findOne({
+      where: {
+        id: req.params.id,
+      },
+    })
+      .then(() => {
+        db.User.update(
+          {
+            username: req.body.username,
+            email: req.body.email,
+            description: req.body.description,
+            picture: newPicture, // Si nouvelle image, son chemin est enregistré dans la BDD
+          },
+          {
+            where: { id: req.params.id },
+          }
+        )
+          .then(() => res.status(200).json({ message: "Compte mis à jour !" }))
+          .catch((error) => res.status(400).json({ error }));
+      })
+      .catch((error) => res.status(500).json({ error }));
+  };
+  
+  // Suppression d'un user 
+  exports.deleteUser = (req, res, next) => {
+    db.User.findOne({
+      where: {
+        id: req.params.id,
+      },
+    })
+      .then((user) => {
+        if (user.picture !== null) {
+          // Si photo de profil présente on la supprime du répertoire, puis on supprime l'user de la BDD
+          const filename = user.picture.split("/images/")[1];
+          fs.unlink(`images/${filename}`, () => {
+            db.User.destroy({ where: { id: req.params.id } });
+            res.status(200).json({ message: "Compte supprimé !" });
+          });
+        } else { // Sinon on supprime uniquement l'user
+          db.User.destroy({ where: { id: req.params.id } });
+          res.status(200).json({ message: "Compte supprimé !" });
+        }
+      })
+  
+      .catch((error) => res.status(500).json({ error }));
+  };

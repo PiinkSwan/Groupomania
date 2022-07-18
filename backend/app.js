@@ -1,13 +1,13 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const path = require('path');
+const express = require('express'); //Express indispensable ) notre APP
+const mongoose = require('mongoose'); //Utilisation de notre base de données avec MongoDB
+const path = require('path'); //Module Node pour la gestion du répertoire images
+const helmet = require('helmet'); //Helmet nécessaire à la sécurisation des headers
 
-
+//Importation des routes
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 
-
+//Mise en place de l'app
 const app = express();
 
 
@@ -23,20 +23,23 @@ if(result.error){
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-
+//Midlleware permettant d'éviter les erreurs CORS lors des communications back - front
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 
+  'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  //Ajout des headers aux requêtes
+  res.setHeader('Access-Control-Allow-Methods', 
+  'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  //Acceptation des requêtes renseignées
   next();
 });
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.json()); //Remplace bodyParser sur les dernières versions de Express
+app.use(helmet()); //utilisation du package Helmet pour sécuriser davantage nos headers
+app.use('/images', express.static(path.join(__dirname, 'images'))); //Pour que Express gère le dossier images de manière statique à chaque requête
 
-
-app.use('/images', express.static(path.join(__dirname, 'images')));
-
+//Déclaration des routes
 app.use('/api/user', userRoutes);
 app.use('/api/post', postRoutes);
 
