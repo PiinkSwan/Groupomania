@@ -5,7 +5,7 @@ const helmet = require('helmet'); //Helmet nécessaire à la sécurisation des h
 
 //Importation des routes
 const userRoutes = require('./routes/user');
-const postRoutes = require('./routes/post');
+const postRoutes = require('./routes/posts');
 
 //Mise en place de l'app
 const app = express();

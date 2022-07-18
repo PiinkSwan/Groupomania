@@ -1,10 +1,14 @@
-const passwordSchema = require("../models/PwdControl"); //On récupère notre shéma
+const passwordSchema = require("../models/PwdControl"); // On récupère notre schéma 
 
-// Ce module fournit une validation de base des mots de passe
+// On compare le mot de passe renseigné avec les contraintes notées dans PwdControl 
 module.exports = (req, res, next) => {
-    if(!passwordSchema.validate(req.body.password)){
-        return res.status(400).json({error: "low security of password! " + passwordSchema.validate(req.body.password, {list:true})})
-    }else{
+    if (!passwordSchema.validate(req.body.password)) { // Si les conditions ne sont pas validées une erreur est retournée 
+        res.writeHead(400, "{'message' : 'Mot de passe invalide, sont requis : 8 caractères minimum, au moins une majuscule et une minuscule, sans espaces'}", 
+        {"content-type" : "application/json"});
+
+        res.end("Ce format de mot de passe est invalide");
+    }
+    else { 
         next();
     }
-}
+};
