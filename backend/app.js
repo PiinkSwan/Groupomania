@@ -12,7 +12,6 @@ const app = express();
 
 
 const dotenv = require('dotenv');
-const { Router } = require('express');
 const result = dotenv.config();
 if(result.error){
   throw result.error

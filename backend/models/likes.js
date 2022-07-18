@@ -1,6 +1,6 @@
 const Sauce = require('./post');
 
-//Création 
+//Création like et dislike
 exports.addLikeOrDislike = (req, res, next) => {
     if (req.body.like == 1) {
       Sauce.updateOne(
@@ -36,7 +36,7 @@ exports.addLikeOrDislike = (req, res, next) => {
             usersLikedFound = true;
           }
         }
-        //Si l'utilisateur n'est pas dans userLiked => cela signifie qu'il n'a pas aimé la sauce, donc annulez le vote dans userDisliked
+        //Si l'utilisateur n'est pas dans userLiked => cela signifie qu'il n'a pas aimé le post
         if (usersLikedFound == false) {
           Sauce.updateOne(
             { _id: req.params.id },
