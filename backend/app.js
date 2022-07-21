@@ -10,14 +10,13 @@ const postRoutes = require('./routes/posts');
 //Mise en place de l'app
 const app = express();
 
-
 const dotenv = require('dotenv');
 const result = dotenv.config();
 if(result.error){
   throw result.error
 }
 //Connexion à la base de donnés MongoDB
- mongoose.connect("mongodb+srv://<Groupomania>:<ns6jKeiPadSytvR2>@cluster0.xl8le.mongodb.net/?retryWrites=true&w=majority",
+ mongoose.connect("mongodb+srv://Groupomania:s3HiZWWzBj50AUoN@cluster1.xl8le.mongodb.net/?retryWrites=true&w=majority",
 { useNewUrlParser: true,
   useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))

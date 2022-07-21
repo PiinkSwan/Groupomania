@@ -24,7 +24,7 @@ exports.createComment = (req, res, next) => {
       .catch((error) => res.status(400).json({ error }));
   };
   
-  // Obtention de tout les commentaires liés à un post 
+  // Obtention de tous les commentaires liés à un post 
   exports.getComments = (req, res, next) => {
     db.Comment.findAll({
       where: {
