@@ -5,7 +5,7 @@ import "./styles/index.scss";
 import Profil from './user/pages/Profil'
 import User from './user'
 import Admin from './admin'
-import Header from './admin/components/Header'
+import Header from './admin/components/header'
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

@@ -1,5 +1,6 @@
 import React from "react";
 import Log from "../../admin/components/log";
+//import logo from '../../assets/'
 
 function Profil() {
     return (
@@ -7,7 +8,7 @@ function Profil() {
             <div className="log-container">
                 <Log signin={false} signup={true} />
                 <div class-name="img-container">
-                <img src="./styles/assets/icon.webp" alt="Logo Groupomania" />
+                <img src="../assets/icon.webp" alt="Logo groupomania" />
                 </div>
             </div>
         </div>

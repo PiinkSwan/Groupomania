@@ -1,27 +1,37 @@
-module.exports = (sequelize, Sequelize) => {
-    const Post = sequelize.define("Post", {
-      id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        primaryKey: true,
-      },
-  
-      message: {
-        type: Sequelize.TEXT, // Aucune limite de caractères contrairement à STRING
-        allowNull: false,
-      },
-  
-      imageURL: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-  
-      link: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
+const mongoose = require('mongoose');
+
+const postSchema = mongoose.Schema(
+    {
+        posterId: {
+            type: String,
+            required: true
+        },
+        message: {
+            type: String,
+            trim: true,
+            maxlenght: 500,
+        },
+        picture: {
+            type: String,
+        },
+        video: {
+            type: String,
+        },
+        likers: {
+            type: [String],
+            require: true,
+        },
+        comments: {
+            type: [
+                {
+                    commenterId: String,
+                    commenterPseudo: String,
+                    text: String,
+                    timestamp: Number,
+                }
+            ],
+            require: true,
+        },
     });
-  
-    return Post;
-  };
+
+module.exports = mongoose.model('Post', postSchema);
